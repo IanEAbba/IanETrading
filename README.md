@@ -45,7 +45,7 @@ The initial strategy to be implemented includes:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/IanETrading.git
+   git clone https://github.com/IanEAbba/IanETrading.git
    cd IanETrading
 
 2. Install Dependencies
