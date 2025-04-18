@@ -63,7 +63,7 @@ The initial strategy to be implemented includes:
    python app.py
 
 ## Future plans
-[] Add automatic order placement logic 
-[] Backtest strategies using historical data 
-[] Build a REST API to monitor bot activity 
-[] Deploy AWS with logs and monitoring. 
+- Add automatic order placement logic 
+- Backtest strategies using historical data 
+- Build a REST API to monitor bot activity 
+- Deploy AWS with logs and monitoring. 
