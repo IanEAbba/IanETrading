@@ -53,14 +53,14 @@ The initial strategy to be implemented includes:
    pip install -r requirements.txt
 
 3. Set your API keys in a .env file:
-```bash
-APCA_API_KEY_ID=your_key
-APCA_API_SECRET_KEY=your_secret
-APCA_API_BASE_URL=https://paper-api.alpaca.markets
+   ```bash
+   APCA_API_KEY_ID=your_key
+   APCA_API_SECRET_KEY=your_secret
+   APCA_API_BASE_URL=https://paper-api.alpaca.markets
 
 4. Run the basic momentum checker:
-```bash
-python app.py
+   ```bash
+   python app.py
 
 ## Future plans
 [] Add automatic order placement logic
