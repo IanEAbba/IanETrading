@@ -17,13 +17,13 @@ The system will be designed as a **modular (plug-in) architecture**, allowing ad
 ## 2 · Project Sponsor
 | Role | Name | Contact | Responsibility |
 |------|------|----------|----------------|
-| Sponsor / Product Owner | Hamin Hong | (personal email / GitHub profile) | Defines requirements, prioritizes tasks, approves deliverables, oversees operations |
+| Sponsor / Product Owner | Hamin Hong | (hhamin93@gmail.com / https://github.com/IanEAbba) | Defines requirements, prioritizes tasks, approves deliverables, oversees operations |
 
 ---
 
 ## 3 · Business Need
-- **Supplemental Income:** Automate contrarian or neutral strategies that capitalize on retail-driven market euphoria to generate steady side profit.  
-- **Professional Value:** Build a full-stack, data-driven automation workflow using Python, GitHub Actions, and secure secret management—valuable for real-world engineering experience.  
+- **Supplemental Income:** Automate various stock trading strategies to generate steady side profit.  
+- **Professional Value:** Build a full-stack, data-driven automation workflow using Python and GitHub Actions for real-world engineering experience.  
 - **Extensibility:** Support multiple strategy plug-ins for faster iteration and diversified risk; establish clear module boundaries for future service-level growth.
 
 ---
@@ -50,6 +50,7 @@ The system will be designed as a **modular (plug-in) architecture**, allowing ad
 **Qualitative**
 - Gain end-to-end experience in data, automation, and deployment workflows.  
 - Accumulate reusable documentation, pipelines, and automation assets for future service transition.
+- take out human-related feelings / in the trading that lead to unwise dicisions(ex. panic sell)
 
 ---
 
