@@ -52,7 +52,7 @@ The system will be designed as a **modular (plug-in) architecture**, allowing ad
 - Accumulate reusable documentation, pipelines, and automation assets for future service transition.
 - take out human-related feelings / in the trading that lead to unwise dicisions(ex. panic sell)
   
----
+---  
 
 ## 6 · Feasibility Analysis
 | Category | Description | Risk |
