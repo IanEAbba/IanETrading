@@ -37,4 +37,4 @@ Define the functional scope of IanETrading (Smart Money tracking, modular strate
 API error → retry and log failure  
 
 ## 5. Activity Diagram
-!(../images/Flowchart.png "flowchart")
+!(images/Flowchart.png "flowchart")
