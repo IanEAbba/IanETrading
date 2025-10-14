@@ -6,7 +6,7 @@ Define the functional scope of IanETrading (Smart Money tracking, modular strate
 ## 2. Functional Requirements
 | ID | Requirement | Priority |
 |----|--------------|----------|
-| F1 | Collect retail sentiment data (e.g., Robinhood API) | High |
+| F1 | Collect and monitor retail sentiment data in real time (e.g., Robinhood API) | High |
 | F2 | Identify divergence between retail and institutional signals | High |
 | F3 | Generate short/hedge trade signals | High |
 | F4 | Execute trades via Alpaca Paper API | High |
