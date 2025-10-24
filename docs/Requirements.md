@@ -11,8 +11,8 @@ Define the functional scope of IanETrading (Smart Money tracking, modular strate
 | F3 | Generate short/hedge trade signals | High |
 | F4 | Execute trades via Alpaca Paper API | High |
 | F5 | Log trade results and performance data | Medium |
-| F6 | Run automatically on schedule (GitHub Actions) | Medium |
-| F7 | Add modular plug-in support for new strategies | High |
+<!-- | F6 | Run automatically on schedule (GitHub Actions) | Medium | -->
+| F6 | Add modular plug-in support for new strategies | High |
 
 ## 3. Non-Functional Requirements
 | ID | Requirement | Priority |
