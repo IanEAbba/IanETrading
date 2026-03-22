@@ -1,132 +1,182 @@
 # CLAUDE.md — AI Assistant Guide for IanETrading
 
+## Session Protocol
+
+**EVERY AI session must start by reading these files in order:**
+1. This file (`CLAUDE.md`) — project structure and conventions
+2. `.claude/SPRINT.md` — current sprint state and in-progress items
+3. `.claude/SESSIONS.md` — last session summary and "what's next"
+4. `.claude/BACKLOG.md` — if starting new work, pick from "Now" section
+5. `.claude/LESSONS.md` — before writing code, review patterns and gotchas
+
+**EVERY AI session must end by updating:**
+1. `.claude/SPRINT.md` — check off completed items, note blockers
+2. `.claude/SESSIONS.md` — append session summary (what was done, what's next, decisions)
+3. `.claude/BACKLOG.md` — move completed items to Done, add discovered items
+4. `.claude/DECISIONS.md` — add any new architectural decisions (ADR format)
+5. `.claude/LESSONS.md` — add any new patterns or gotchas discovered
+6. `CLAUDE.md` — if project structure or conventions changed
+
+---
+
 ## Project Overview
 
-IanETrading is a **Smart Money Momentum automated trading bot** built in Python. It uses the Alpaca Markets API to detect institutional buying behavior (unusual volume spikes + price breakouts) and execute trades. The project is in early-stage development (Sprint 1).
+IanETrading is a **Smart Money Momentum automated trading bot** built in Python. It uses the Alpaca Markets API to detect institutional buying behavior (unusual volume spikes + price breakouts) and execute trades.
 
 **Owner:** Hamin Hong (@IanEAbba)
+**Current Phase:** Phase 1 — Core Modules (DataFetcher, SignalManager, TradeExecutor)
 
 ## Repository Structure
 
 ```
 IanETrading/
-├── app/                          # Core application code
-│   ├── app.py                   # Main entry point — momentum check loop
-│   ├── alpaca_client.py         # Alpaca REST API wrapper (get_bars, submit_order, etc.)
-│   └── strategy.py              # Momentum detection logic (check_momentum)
-├── docs/                        # Project documentation
-│   ├── requirements.txt         # Python dependencies
-│   ├── Requirements.md          # Functional & non-functional requirements
-│   ├── projectPlan.md           # 8-10 week project timeline
-│   └── SystemRequest.md         # Business case, scope, feasibility
-├── management/                  # DevOps/automation scripts
-│   └── sprint_automation.py     # GitHub Issues/project board automation
-├── images/                      # Assets (flowchart diagram)
-├── index.html                   # Simple landing page
-└── README.md                    # High-level project overview
+├── src/                              # Active codebase (clean restart as of 2026-03-22)
+│   ├── __init__.py
+│   ├── config.py                    # Config loader — merges .env + config.yaml
+│   ├── main.py                      # Entry point (TODO: Phase 2)
+│   ├── data_fetcher.py              # DataFetcher class (TODO: Phase 1a)
+│   ├── signal_manager.py            # SignalManager class (TODO: Phase 1b)
+│   ├── trade_executor.py            # TradeExecutor class (TODO: Phase 1c)
+│   └── strategies/                  # Strategy plugins
+│       ├── __init__.py
+│       ├── base.py                  # BaseStrategy ABC + Signal dataclass
+│       └── momentum.py             # Smart Money Momentum strategy
+├── tests/                           # Test suite (pytest)
+│   ├── conftest.py                  # Shared fixtures (sample OHLCV DataFrames)
+│   └── test_momentum_strategy.py   # 9 tests for momentum strategy
+├── .claude/                         # AI session context (committed to git)
+│   ├── BACKLOG.md                   # Prioritized work items
+│   ├── DECISIONS.md                 # Architectural Decision Records
+│   ├── SPRINT.md                    # Current sprint state
+│   ├── SESSIONS.md                  # Session log (what was done, what's next)
+│   └── LESSONS.md                   # Patterns, gotchas, conventions
+├── app/                             # DEPRECATED — legacy prototype (see app/DEPRECATED.md)
+├── docs/                            # Project documentation
+│   ├── Requirements.md              # Functional & non-functional requirements
+│   ├── projectPlan.md               # 8-10 week project timeline
+│   ├── SystemRequest.md             # Business case, scope, feasibility
+│   └── requirements.txt             # Legacy deps file (use pyproject.toml instead)
+├── management/
+│   └── sprint_automation.py         # GitHub Issues/project board automation
+├── images/
+│   └── Flowchart.png                # Architecture diagram
+├── pyproject.toml                   # Package config, deps, linting, testing
+├── config.example.yaml              # Strategy config template
+├── .env.example                     # Environment variable template
+├── .gitignore
+├── index.html                       # Simple landing page
+└── README.md
 ```
 
 ## Tech Stack
 
 - **Python 3.10+** — primary language
-- **alpaca-trade-api** — Alpaca Markets REST API client (paper + live trading)
-- **pandas** — OHLCV data manipulation via DataFrames
-- **python-dotenv** — environment variable management
-- **requests** — HTTP (used in sprint automation)
-- **schedule** — task scheduling (planned)
+- **alpaca-trade-api >=3.0** — Alpaca Markets REST API client (paper + live)
+- **pandas >=2.0** — OHLCV data manipulation
+- **pyyaml >=6.0** — config file parsing
+- **tenacity >=8.0** — retry logic with exponential backoff
+- **python-dotenv >=1.0** — environment variable management
+- **pytest >=7.0** — test framework (dev dependency)
+- **ruff >=0.3** — linting (dev dependency)
 
-## Key Entry Points & Functions
+## Key Entry Points
 
-| File | Key Functions | Purpose |
-|------|--------------|---------|
-| `app/app.py` | `check_momentum(ticker)` | Main loop: iterates tickers, checks signals |
-| `app/alpaca_client.py` | `get_account()`, `get_bars()`, `submit_order()` | Alpaca API wrapper |
-| `app/strategy.py` | `check_momentum(df, price_thresh, volume_multiplier)` | Returns `True` if momentum detected |
-| `management/sprint_automation.py` | `create_issue()`, `add_to_project()` | GitHub project board automation |
+| File | Key Classes/Functions | Purpose |
+|------|----------------------|---------|
+| `src/config.py` | `load_config()` | Loads .env + config.yaml into merged config dict |
+| `src/strategies/base.py` | `BaseStrategy`, `Signal` | Strategy ABC and signal dataclass |
+| `src/strategies/momentum.py` | `MomentumStrategy.evaluate()` | Detects volume spikes + price breakouts |
+| `src/data_fetcher.py` | `DataFetcher.fetch()` | Alpaca API wrapper with retry (TODO) |
+| `src/signal_manager.py` | `SignalManager.evaluate_all()` | Runs strategies against tickers (TODO) |
+| `src/trade_executor.py` | `TradeExecutor.execute()` | Order submission + dry-run (TODO) |
+| `src/main.py` | `main()` | Pipeline orchestrator (TODO) |
 
-Default tickers: `AAPL, MSFT, NVDA, TSLA, AMZN`
-
-## Environment Variables
-
-Required in a `.env` file at project root:
-
-```
-APCA_API_KEY_ID=your_key
-APCA_API_SECRET_KEY=your_secret
-APCA_API_BASE_URL=https://paper-api.alpaca.markets
-```
-
-For sprint automation:
-```
-GITHUB_TOKEN=your_github_token
-```
-
-**Never commit `.env` files.** They are in `.gitignore`.
-
-## Running the Project
+## Setup
 
 ```bash
-# Install dependencies
-pip install -r docs/requirements.txt
+# Install (production + dev tools)
+pip install -e ".[dev]"
 
-# Run the momentum checker
-python app/app.py
+# Copy config templates
+cp .env.example .env          # Fill in Alpaca API keys
+cp config.example.yaml config.yaml  # Adjust strategy params
+
+# Run tests
+pytest
+
+# Lint
+ruff check src/
+
+# Run bot (once main.py is built)
+python -m src.main --dry-run
 ```
 
-No formal build system — direct Python execution.
+## Configuration
+
+**Two-tier config system (ADR-004):**
+- `.env` — secrets only (API keys). Gitignored. See `.env.example`.
+- `config.yaml` — strategy params, tickers, execution mode. Committed. See `config.example.yaml`.
+- `src/config.py` merges both into a single dict.
 
 ## Architecture
 
-The codebase follows a three-tier modular design:
+Three-tier modular design with strategy plugin pattern (ADR-003):
 
-1. **Data Layer** — `alpaca_client.py` wraps Alpaca REST API calls
-2. **Strategy Layer** — `strategy.py` contains stateless signal detection logic
-3. **Execution Layer** — planned (TradeExecutor module in Sprint 1)
-
-### Planned Refactoring (Sprint 1)
-
-The codebase is being restructured into:
-- `DataFetcher` — class-based data fetching with retry/caching
-- `SignalManager` — extracted from strategy.py, config-driven
-- `TradeExecutor` — order submission with dry-run mode
-- Entry point will move to `src/main.py`
-- GitHub Actions workflow at `.github/workflows/daily.yml`
+```
+main.py (orchestrator)
+  ├── config.py          (loads .env + config.yaml)
+  ├── data_fetcher.py    (Alpaca API with retry/cache)
+  ├── signal_manager.py  (loads + runs strategy plugins)
+  │     └── strategies/  (BaseStrategy → MomentumStrategy, etc.)
+  └── trade_executor.py  (dry-run / paper / live mode)
+```
 
 ## Code Conventions
 
-- **Docstrings:** Google-style with `Args:` / `Returns:` sections
-- **Comments:** Mixed English/Korean (owner preference)
-- **Functions:** Prefer stateless utility functions; classes being introduced in Sprint 1
-- **Error handling:** Try/except around API calls with logging
-- **Type hints:** Minimal — used in function signatures (e.g., `ticker: str`)
-- **Data format:** Pandas DataFrames for all OHLCV data
-- **Config:** Environment variables via dotenv, strategy thresholds as function params
+- **Logging:** `logging` module only, never `print()`. Use `logger = logging.getLogger(__name__)`.
+- **Docstrings:** Google-style with `Args:` / `Returns:` sections.
+- **Type hints:** On all function signatures. Use `str | None` syntax (3.10+).
+- **Error handling:** Catch specific exceptions, not bare `except`. Always log errors.
+- **Config:** All thresholds configurable via config.yaml. No hardcoded values.
+- **Strategies:** Must inherit `BaseStrategy` and implement `evaluate() -> Signal`.
+- **Language:** Code and comments in English. Korean acceptable in docs/ only.
+- **Data format:** Pandas DataFrames with standard OHLCV columns.
+
+## Quality Gates (before merging to main)
+
+1. `ruff check src/` — zero warnings
+2. `pytest` — all tests pass
+3. No `print()` in src/
+4. All new functions have docstrings
+5. No hardcoded secrets
+6. `.claude/` context files updated
 
 ## Testing
 
-No test framework is configured yet. Planned approach:
-- Mock Alpaca API for unit tests
-- Backtesting with sample data
-- Walk-forward and out-of-sample validation via Google Colab
-
-## CI/CD
-
-Not yet implemented. Planned:
-- **GitHub Actions** with daily cron (`0 14 * * 1-5` UTC, market hours)
-- Secrets: `ALPACA_KEY`, `ALPACA_SECRET` in GitHub Secrets
-- Entry: `python src/main.py`
-
-## Git Conventions
-
-- **Primary branch:** `main`
-- **Commit style:** Short descriptive messages; issue-closing commits use `closes #N`
-- No linting or pre-commit hooks configured
+- Framework: pytest + pytest-mock
+- Fixtures: `tests/conftest.py` has sample DataFrames (bullish, flat, empty, single-bar)
+- Pattern: test edge cases — empty data, missing columns, zero values, boundary thresholds
+- Naming: `test_<behavior>` not `test_<method_name>`
 
 ## Important Notes for AI Assistants
 
-1. This is an **early-stage project** — keep changes simple and incremental
-2. Dependencies are in `docs/requirements.txt` (not project root)
-3. The `.env` file is required but never committed — always remind about setup
-4. Paper trading URL (`paper-api.alpaca.markets`) is the default — never default to live trading
-5. Strategy parameters (`price_thresh`, `volume_multiplier`) should remain configurable, not hardcoded
-6. When adding new modules, follow the planned `DataFetcher` / `SignalManager` / `TradeExecutor` pattern from Sprint 1 planning
+1. **Read .claude/ context files** at session start — they contain current state and decisions
+2. **Paper trading only** — `paper-api.alpaca.markets` is default. Never default to live trading.
+3. **Strategy params must be configurable** — via config.yaml, not hardcoded
+4. **app/ is deprecated** — all new code goes in src/. See app/DEPRECATED.md.
+5. **Dependencies in pyproject.toml** — not docs/requirements.txt (legacy)
+6. **Update .claude/ files** at session end — this is how continuity is maintained
+7. The development roadmap lives in `.claude/BACKLOG.md` — check "Now" section for priorities
+
+## Development Roadmap (Summary)
+
+| Phase | Focus | Status |
+|-------|-------|--------|
+| **Phase 0** | Foundation (pyproject.toml, src/, tests/, .claude/) | Complete |
+| **Phase 1** | Core modules (DataFetcher, SignalManager, TradeExecutor) | Next |
+| **Phase 2** | Integration pipeline + GitHub Actions CI/CD | Planned |
+| **Phase 3** | Backtesting + paper trading validation | Planned |
+| **Phase 4** | Advanced features (multi-strategy, alerts, monitoring) | Planned |
+| **Phase 5** | Production readiness (Docker, AWS, observability) | Planned |
+
+See `.claude/BACKLOG.md` for detailed task breakdown.

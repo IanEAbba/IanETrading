@@ -222,3 +222,11 @@ $RECYCLE.BIN/
 .vscode/
 
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,windows
+
+### IanETrading ###
+# Runtime data directories
+logs/
+data/
+
+# Config with secrets (use config.example.yaml as template)
+config.yaml
