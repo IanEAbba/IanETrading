@@ -24,7 +24,7 @@
 IanETrading is a **Smart Money Momentum automated trading bot** built in Python. It uses the Alpaca Markets API to detect institutional buying behavior (unusual volume spikes + price breakouts) and execute trades.
 
 **Owner:** Hamin Hong (@IanEAbba)
-**Current Phase:** Phase 1b — SignalManager (DataFetcher complete)
+**Current Phase:** Phase 1c — TradeExecutor (DataFetcher + SignalManager complete)
 
 ## Repository Structure
 
@@ -87,7 +87,7 @@ IanETrading/
 | `src/strategies/base.py` | `BaseStrategy`, `Signal` | Strategy ABC and signal dataclass |
 | `src/strategies/momentum.py` | `MomentumStrategy.evaluate()` | Detects volume spikes + price breakouts |
 | `src/data_fetcher.py` | `DataFetcher.fetch()` | Alpaca API wrapper with retry + caching |
-| `src/signal_manager.py` | `SignalManager.evaluate_all()` | Runs strategies against tickers (TODO) |
+| `src/signal_manager.py` | `SignalManager.evaluate_all()` | Loads strategies from config, evaluates tickers |
 | `src/trade_executor.py` | `TradeExecutor.execute()` | Order submission + dry-run (TODO) |
 | `src/main.py` | `main()` | Pipeline orchestrator (TODO) |
 
