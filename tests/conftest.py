@@ -1,5 +1,7 @@
 """Shared test fixtures for IanETrading."""
 
+from unittest.mock import MagicMock
+
 import pandas as pd
 import pytest
 
@@ -74,4 +76,63 @@ def sample_config():
             "default_qty": 1,
             "log_trades": True,
         },
+    }
+
+
+@pytest.fixture
+def mock_bars_response(sample_ohlcv_bullish):
+    """Mock alpaca-py BarSet response with .df returning a MultiIndex DataFrame.
+
+    Simulates what StockHistoricalDataClient.get_stock_bars() returns.
+    The real response has a MultiIndex (symbol, timestamp).
+    """
+    # Build MultiIndex DataFrame like Alpaca returns
+    df = sample_ohlcv_bullish.copy()
+    df["trade_count"] = [50, 55, 45, 52, 200]
+    df["vwap"] = [100.5, 101.5, 102.5, 103.5, 105.5]
+
+    # Create MultiIndex with symbol level
+    symbol_index = pd.MultiIndex.from_arrays(
+        [["AAPL"] * len(df), range(len(df))],
+        names=["symbol", "timestamp"],
+    )
+    df.index = symbol_index
+
+    # Create mock BarSet with .df property
+    mock_barset = MagicMock()
+    mock_barset.df = df
+    return mock_barset
+
+
+@pytest.fixture
+def mock_empty_bars_response():
+    """Mock BarSet with empty DataFrame."""
+    mock_barset = MagicMock()
+    mock_barset.df = pd.DataFrame()
+    return mock_barset
+
+
+@pytest.fixture
+def mock_alpaca_client(mock_bars_response):
+    """Mock StockHistoricalDataClient that returns bars."""
+    client = MagicMock()
+    client.get_stock_bars.return_value = mock_bars_response
+    return client
+
+
+@pytest.fixture
+def data_fetcher_config(tmp_path):
+    """Config dict for DataFetcher tests with temp cache directory."""
+    return {
+        "alpaca": {
+            "key_id": "test_key",
+            "secret_key": "test_secret",
+        },
+        "data": {
+            "timeframe": "1Min",
+            "bar_limit": 30,
+            "cache_enabled": False,
+            "retry_attempts": 2,  # Low for faster tests
+        },
+        "_root_dir": str(tmp_path),
     }

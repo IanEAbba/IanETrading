@@ -23,8 +23,11 @@
 - src/config.py is the single config source — merges .env + config.yaml
 
 ## Gotchas
-- Alpaca API returns empty bars outside market hours — DataFetcher must handle gracefully
-- alpaca-trade-api library expects env vars named `APCA_API_KEY_ID` (not ALPACA_KEY)
+- Alpaca API returns empty bars outside market hours — DataFetcher returns empty DataFrame with correct columns
+- **alpaca-py (not alpaca-trade-api)** is the active SDK. alpaca-trade-api is deprecated (ADR-006)
+- alpaca-py `get_stock_bars()` returns MultiIndex DataFrame (symbol, timestamp) — must `droplevel("symbol")`
+- alpaca-py TimeFrame objects don't support `==` comparison — use `str(tf)` for assertions
+- alpaca-py needs `pytz` at runtime (not listed in its own deps — install if missing)
 - `GitHub_Token` in sprint_automation.py should be `GITHUB_TOKEN` — fix when touching that file
 - Legacy app/strategy.py uses `volume_multiplier=2.0` but app/app.py hardcodes `1.5` — src/ uses 2.0 (configurable)
 - Division by zero: always check denominator before calculating price_change or volume_ratio

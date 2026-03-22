@@ -1,40 +1,40 @@
 # Current Sprint
 
-**Sprint:** Phase 0 — Foundation
-**Goal:** Set up project tooling, create src/ structure, establish test framework, build context system
+**Sprint:** Phase 1a — DataFetcher
+**Goal:** Build DataFetcher class with Alpaca API integration, retry logic, and caching
 **Started:** 2026-03-22
 **Target End:** 2026-03-29
 
 ## Items
-- [x] Create pyproject.toml with all deps and tool config
-- [x] Create .env.example and config.example.yaml
-- [x] Create src/ module structure (config.py, strategies/base.py, momentum.py)
-- [x] Create tests/ framework with conftest.py fixtures and momentum strategy tests
-- [x] Create .claude/ context directory with all 5 files
-- [x] Add deprecation notice to app/
-- [x] Update CLAUDE.md with new structure and session protocol
-- [x] Update .gitignore for logs/, data/, .venv/
-- [x] Verify: pip install -e ".[dev]", ruff check, pytest all pass
+- [x] Migrate from deprecated alpaca-trade-api to alpaca-py (ADR-006)
+- [x] Create src/data_fetcher.py — DataFetcher class
+- [x] Implement fetch(ticker, timeframe, limit) → DataFrame
+- [x] Add retry logic with tenacity (configurable attempts, exponential backoff)
+- [x] Add optional CSV caching to data/ directory
+- [x] Add parse_timeframe() for config string → TimeFrame conversion
+- [x] Add fetch_multiple(tickers) → {ticker: DataFrame}
+- [x] Write tests/test_data_fetcher.py (12 tests across 4 test classes)
+- [x] Add shared test fixtures to conftest.py (mock_bars_response, mock_alpaca_client, etc.)
 
 ## Blockers
 - None
 
 ## Notes
-- Phase 0 completed in single session (2026-03-22)
-- Ready to begin Phase 1 (Core Modules) next session
-- Priority for Phase 1: DataFetcher first (enables SignalManager and TradeExecutor)
+- Phase 1a completed in same session as Phase 0 (2026-03-22)
+- alpaca-py 0.43.2 installed and working; alpaca-trade-api still in environment but unused
+- All 21 tests passing (9 momentum + 12 data_fetcher), ruff clean
+- Ready to begin Phase 1b (SignalManager) next session
 
 ---
 
 # Next Sprint
 
-**Sprint:** Phase 1a — DataFetcher
-**Goal:** Build DataFetcher class with Alpaca API integration, retry logic, and caching
+**Sprint:** Phase 1b — SignalManager
+**Goal:** Build SignalManager that loads strategy plugins from config and evaluates tickers
 **Estimated:** 1 session (~2-3 hours)
 
 ## Items
-- [ ] Create src/data_fetcher.py — DataFetcher class
-- [ ] Implement fetch(ticker, timeframe, limit) → DataFrame
-- [ ] Add retry logic with tenacity (3 retries, exponential backoff)
-- [ ] Add optional CSV caching to data/ directory
-- [ ] Write tests/test_data_fetcher.py (4+ tests)
+- [ ] Create src/signal_manager.py — SignalManager class
+- [ ] Implement evaluate_all(tickers, data) → list of Signals
+- [ ] Strategy loading from config (which strategies are enabled)
+- [ ] Write tests/test_signal_manager.py (5+ tests)

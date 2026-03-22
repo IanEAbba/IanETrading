@@ -83,3 +83,27 @@
 - Sprint state persists across sessions
 - Small maintenance overhead per session (update 2-3 files)
 - Git history shows project evolution through context files
+
+---
+
+## ADR-006: Migrate from alpaca-trade-api to alpaca-py
+**Date:** 2026-03-22
+**Status:** Accepted
+
+**Context:** `alpaca-trade-api` (v3.2.0) is deprecated — last release Jan 2024, maintenance officially ended 2022. Alpaca recommends `alpaca-py` (v0.43.2, Nov 2025) as the official SDK. Since we're building src/ from scratch (ADR-001), this is the ideal time to migrate.
+
+**Decision:** Replace `alpaca-trade-api` with `alpaca-py` in pyproject.toml. Use `StockHistoricalDataClient` for market data and `TradingClient` for order execution (Phase 1c).
+
+**Key API differences:**
+- `StockHistoricalDataClient(api_key, secret_key)` replaces `REST(key_id, secret_key, base_url)`
+- `StockBarsRequest(symbol_or_symbols, timeframe, limit)` object-oriented pattern
+- `client.get_stock_bars(request).df` returns MultiIndex DataFrame (symbol, timestamp)
+- `TimeFrame.Minute`, `TimeFrame.Day`, `TimeFrame(5, TimeFrameUnit.Minute)` for custom
+- `alpaca.common.exceptions.APIError` with `.status_code`, `.code`, `.message`
+- Built-in retry for 429/504 via `APCA_RETRY_MAX` env var
+
+**Consequences:**
+- Legacy app/ code no longer matches the SDK (further reason to keep it archived)
+- alpaca-py uses pydantic models — better validation but slightly more verbose
+- Paper trading works the same way (just use paper API keys)
+- TradingClient needed for Phase 1c (different import path than data client)

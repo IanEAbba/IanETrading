@@ -24,7 +24,7 @@
 IanETrading is a **Smart Money Momentum automated trading bot** built in Python. It uses the Alpaca Markets API to detect institutional buying behavior (unusual volume spikes + price breakouts) and execute trades.
 
 **Owner:** Hamin Hong (@IanEAbba)
-**Current Phase:** Phase 1 — Core Modules (DataFetcher, SignalManager, TradeExecutor)
+**Current Phase:** Phase 1b — SignalManager (DataFetcher complete)
 
 ## Repository Structure
 
@@ -71,7 +71,7 @@ IanETrading/
 ## Tech Stack
 
 - **Python 3.10+** — primary language
-- **alpaca-trade-api >=3.0** — Alpaca Markets REST API client (paper + live)
+- **alpaca-py >=0.30** — Official Alpaca Markets SDK (replaced deprecated alpaca-trade-api)
 - **pandas >=2.0** — OHLCV data manipulation
 - **pyyaml >=6.0** — config file parsing
 - **tenacity >=8.0** — retry logic with exponential backoff
@@ -86,7 +86,7 @@ IanETrading/
 | `src/config.py` | `load_config()` | Loads .env + config.yaml into merged config dict |
 | `src/strategies/base.py` | `BaseStrategy`, `Signal` | Strategy ABC and signal dataclass |
 | `src/strategies/momentum.py` | `MomentumStrategy.evaluate()` | Detects volume spikes + price breakouts |
-| `src/data_fetcher.py` | `DataFetcher.fetch()` | Alpaca API wrapper with retry (TODO) |
+| `src/data_fetcher.py` | `DataFetcher.fetch()` | Alpaca API wrapper with retry + caching |
 | `src/signal_manager.py` | `SignalManager.evaluate_all()` | Runs strategies against tickers (TODO) |
 | `src/trade_executor.py` | `TradeExecutor.execute()` | Order submission + dry-run (TODO) |
 | `src/main.py` | `main()` | Pipeline orchestrator (TODO) |
