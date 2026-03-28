@@ -1,0 +1,30 @@
+# IanETrading Configuration
+# Copy to config.yaml and adjust values as needed.
+
+# Tickers to monitor
+tickers:
+  - AAPL
+  - MSFT
+  - NVDA
+  - TSLA
+  - AMZN
+
+# Data fetching settings
+data:
+  timeframe: "1Min"       # Alpaca timeframe (1Min, 5Min, 15Min, 1Hour, 1Day)
+  bar_limit: 30           # Number of bars to fetch per ticker
+  cache_enabled: false    # Save fetched data to data/ directory
+  retry_attempts: 3       # Number of retries on API failure
+
+# Strategy settings
+strategies:
+  momentum:
+    enabled: true
+    price_threshold: 1.0      # Minimum % price change to trigger signal
+    volume_multiplier: 2.0    # Volume must exceed avg by this factor
+
+# Execution settings
+execution:
+  mode: "dry-run"         # Options: dry-run, paper, live
+  default_qty: 1          # Shares per order
+  log_trades: true        # Log trades to logs/trades.csv
