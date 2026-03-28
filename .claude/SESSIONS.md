@@ -4,6 +4,63 @@
 
 ---
 
+## Session 2026-03-28 — Documentation Sync
+**Branch:** claude/add-claude-documentation-oJu6O
+**Duration:** ~10 min
+
+**What was done:**
+- Synced .claude/ context files: SESSIONS.md was missing Phase 1c entry, BACKLOG.md still showed Phase 1c as current
+- Added Phase 1c session log (Part 4)
+- Updated BACKLOG.md: marked Phase 1c done, promoted Phase 2 to "Now"
+- Verified all 43 tests pass and ruff is clean
+
+**Decisions made:**
+- None
+
+**What's next:**
+- Phase 2: Create src/main.py (CLI orchestrator) + GitHub Actions workflow
+
+**Open questions:**
+- None
+
+---
+
+## Session 2026-03-22 (Part 4) — Phase 1c: TradeExecutor
+**Branch:** claude/add-claude-documentation-oJu6O
+**Duration:** ~20 min
+
+**What was done:**
+- Created src/trade_executor.py (160 lines):
+  - TradeExecutor class with dependency injection (config + optional TradingClient)
+  - Three execution modes: dry-run (no API), paper (Alpaca paper), live (with loud warning)
+  - execute(signals) filters for actionable buy/sell, returns list[dict] results
+  - _submit_order() builds MarketOrderRequest, calls TradingClient.submit_order()
+  - Error isolation per order: APIError -> status="failed", Exception -> status="error"
+  - CSV trade logging via stdlib csv module to logs/trades.csv
+  - Mode validation on init (ValueError for unrecognized modes)
+- Added 3 fixtures to conftest.py: sample_buy_signal, sample_signals, trade_executor_config
+- Created tests/test_trade_executor.py with 12 tests across 4 classes:
+  - TestTradeExecutorInit (3): dry-run no client, invalid mode, default_qty from config
+  - TestTradeExecutorDryRun (4): returns results, filters holds, status, empty signals
+  - TestTradeExecutorPaper (3): submits order, API error handling, captures order_id
+  - TestTradeExecutorLogging (2): CSV created, no CSV when disabled
+- Fixed 2 ruff issues (unused import, line length)
+- All 43 tests passing (9 momentum + 12 data_fetcher + 10 signal_manager + 12 trade_executor), ruff clean
+
+**Decisions made:**
+- Result format is list[dict] (simple, serializable, no new dataclass)
+- CSV logging uses stdlib csv (no new dependency)
+- GTC time-in-force for all market orders (matches legacy behavior)
+- Live mode gets logger.warning on init but no additional safeguard (Phase 5 concern)
+
+**What's next:**
+- Phase 2: Create src/main.py (CLI orchestrator) + GitHub Actions workflow
+
+**Open questions:**
+- None
+
+---
+
 ## Session 2026-03-22 (Part 3) — Phase 1b: SignalManager
 **Branch:** claude/add-claude-documentation-oJu6O
 **Duration:** ~15 min

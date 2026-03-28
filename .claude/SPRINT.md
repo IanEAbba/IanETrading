@@ -1,36 +1,36 @@
 # Current Sprint
 
-**Sprint:** Phase 1b — SignalManager
-**Goal:** Build SignalManager that loads strategy plugins from config and evaluates tickers
+**Sprint:** Phase 1c — TradeExecutor
+**Goal:** Build TradeExecutor with dry-run/paper/live modes, trade logging, error handling
 **Started:** 2026-03-22
-**Target End:** 2026-03-29
+**Target End:** 2026-03-22
 
 ## Items
-- [x] Create src/signal_manager.py — SignalManager class
-- [x] Strategy registry mapping config names → classes
-- [x] Config-driven loading (enabled/disabled per strategy)
-- [x] evaluate_all(data) → list of Signals with error isolation
-- [x] Write tests/test_signal_manager.py (10 tests across 2 classes)
+- [x] Create src/trade_executor.py — TradeExecutor class
+- [x] Three execution modes: dry-run, paper, live (with warning)
+- [x] execute(signals) → list[dict] with error isolation per order
+- [x] CSV trade logging to logs/trades.csv (configurable)
+- [x] Dependency injection pattern (accepts TradingClient for testing)
+- [x] Add fixtures to conftest.py (sample_buy_signal, sample_signals, trade_executor_config)
+- [x] Write tests/test_trade_executor.py (12 tests across 4 classes)
 
 ## Blockers
 - None
 
 ## Notes
-- Phase 1b completed same day as Phase 0 and 1a (2026-03-22)
-- All 31 tests passing (9 momentum + 12 data_fetcher + 10 signal_manager), ruff clean
-- Ready to begin Phase 1c (TradeExecutor) next session
+- Phase 1c completed same day as Phase 0, 1a, and 1b (2026-03-22)
+- All 43 tests passing (9 momentum + 12 data_fetcher + 10 signal_manager + 12 trade_executor), ruff clean
+- All Phase 1 core modules complete. Ready to begin Phase 2 (main.py + CI/CD)
 
 ---
 
 # Next Sprint
 
-**Sprint:** Phase 1c — TradeExecutor
-**Goal:** Build TradeExecutor with dry-run/paper modes, trade logging, and error handling
-**Estimated:** 1 session (~2-3 hours)
+**Sprint:** Phase 2 — Integration Pipeline + CI/CD
+**Goal:** Wire up main.py orchestrator and GitHub Actions workflow
 
 ## Items
-- [ ] Create src/trade_executor.py — TradeExecutor class
-- [ ] Implement execute(signals) with dry-run and paper modes
-- [ ] Add trade logging to logs/trades.csv
-- [ ] Error handling for API/balance errors
-- [ ] Write tests/test_trade_executor.py (5+ tests)
+- [ ] Create src/main.py — CLI orchestrator (DataFetcher → SignalManager → TradeExecutor)
+- [ ] Add CLI args: --dry-run, --tickers, --config
+- [ ] Create .github/workflows/daily.yml — scheduled + manual dispatch
+- [ ] Integration test: end-to-end pipeline in dry-run mode

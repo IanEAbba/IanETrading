@@ -121,6 +121,44 @@ def mock_alpaca_client(mock_bars_response):
 
 
 @pytest.fixture
+def sample_buy_signal():
+    """Single buy Signal for testing."""
+    from src.strategies.base import Signal
+
+    return Signal(ticker="AAPL", action="buy", strength=0.85, reason="Volume spike + breakout")
+
+
+@pytest.fixture
+def sample_signals():
+    """Mixed list of Signals: buy, sell, and hold."""
+    from src.strategies.base import Signal
+
+    return [
+        Signal(ticker="AAPL", action="buy", strength=0.85, reason="Volume spike"),
+        Signal(ticker="MSFT", action="sell", strength=0.60, reason="Breakdown detected"),
+        Signal(ticker="NVDA", action="hold", strength=0.0, reason="No signal"),
+    ]
+
+
+@pytest.fixture
+def trade_executor_config(tmp_path):
+    """Config dict for TradeExecutor tests with temp log directory."""
+    return {
+        "alpaca": {
+            "key_id": "test_key",
+            "secret_key": "test_secret",
+            "base_url": "https://paper-api.alpaca.markets",
+        },
+        "execution": {
+            "mode": "dry-run",
+            "default_qty": 1,
+            "log_trades": False,
+        },
+        "_root_dir": str(tmp_path),
+    }
+
+
+@pytest.fixture
 def data_fetcher_config(tmp_path):
     """Config dict for DataFetcher tests with temp cache directory."""
     return {
